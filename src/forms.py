@@ -32,8 +32,8 @@ class RegistrationForm(FlaskForm):
 class TaskForm(FlaskForm):
     taskname = StringField('Taskname',
                            validators=[DataRequired(), Length(min=2, max=20)])
-    category = StringField('Category',
-                           validators=[DataRequired(), Length(min=2, max=20)])
+    category = SelectField('Category',
+                           choices=[('physical', "physical"), ("intellectual", "intellectual")])
     startdate = DateField('Start Date', format='%Y-%m-%d')
     duedate = DateField('End Date', format='%Y-%m-%d')
     status = SelectField(
@@ -47,8 +47,8 @@ class TaskForm(FlaskForm):
 class UpdateForm(FlaskForm):
     taskname = StringField('Taskname',
                            validators=[DataRequired(), Length(min=2, max=20)])
-    category = StringField('Category',
-                           validators=[DataRequired(), Length(min=2, max=20)])
+    category = SelectField('Category',
+                           choices=[('physical', "physical"), ("intellectual", "intellectual")])
     startdate = DateField('Start Date', format='%Y-%m-%d')
     duedate = DateField('End Date', format='%Y-%m-%d')
     status = SelectField(
