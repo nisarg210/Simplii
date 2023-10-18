@@ -3,7 +3,10 @@ from wtforms.fields.html5 import DateField
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.fields.core import SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from apps import App
+import sys
+import os
+sys.path.insert(0, os.path.join(os.getcwd(), 'src'))
+from src.apps import App
 
 
 class RegistrationForm(FlaskForm):
