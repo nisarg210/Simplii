@@ -2,6 +2,8 @@ import inspect
 import unittest
 import sys
 import os
+from unittest.mock import patch
+from datetime import datetime, timedelta
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir) 
 sys.path.insert(0, parentdir)
@@ -80,7 +82,7 @@ class BasicTestCase(unittest.TestCase):
             'status': 'In Progress'
         }
         mock_find.return_value = [mock_task]
-        result = emailReminder()
+        result = app.emailReminder()
         # Check if the email message is being sent
         self.assertEqual(mock_send.call_count, 1)
         # You can further check the content of the email if needed
