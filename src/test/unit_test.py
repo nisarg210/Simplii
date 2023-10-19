@@ -68,7 +68,23 @@ class BasicTestCase(unittest.TestCase):
         self.app = app.test_client()
         ans = self.app.get('/deleteTask')
         self.assertEqual(ans.status_code, 200)
-
+    
+    @patch('your_module.mongo.db.tasks.find')
+    @patch('your_module.mail.send')
+    def test_email_reminder(self, mock_send, mock_find):
+        tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
+        mock_task = {
+            'email': 'test@example.com',
+            'taskname': 'Test Task',
+            'duedate': tomorrow,
+            'status': 'In Progress'
+        }
+        mock_find.return_value = [mock_task]
+        result = emailReminder()
+        # Check if the email message is being sent
+        self.assertEqual(mock_send.call_count, 1)
+        # You can further check the content of the email if needed
+        self.assertEqual(result, "Message sent")
 
 if __name__ == '__main__':
     unittest.main()
