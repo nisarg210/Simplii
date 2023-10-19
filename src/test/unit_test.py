@@ -2,7 +2,7 @@ import inspect
 import unittest
 import sys
 import os
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from datetime import datetime, timedelta
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir) 
@@ -73,7 +73,8 @@ class BasicTestCase(unittest.TestCase):
     
     @patch('application.mongo.db.tasks.find')
     @patch('application.mail.send')
-    def test_email_reminder(self, mock_send, mock_find):
+    def test_email_reminder(self, mock_mail_send, mock_db_find):
+        # Set up a mock task with a due date for tomorrow
         tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
         mock_task = {
             'email': 'test@example.com',
@@ -81,10 +82,19 @@ class BasicTestCase(unittest.TestCase):
             'duedate': tomorrow,
             'status': 'In Progress'
         }
-        mock_find.return_value = [mock_task]
+
+        # Mock the database query function to return the mock task
+        mock_db_find.return_value = [mock_task]
+
+        # Mock the email sending function
+        mock_mail = Mock()
+        mock_mail_send.return_value = mock_mail
+
         result = app.emailReminder()
+
         # Check if the email message is being sent
-        self.assertEqual(mock_send.call_count, 1)
+        self.assertEqual(mock_mail_send.call_count, 1)
+
         # You can further check the content of the email if needed
         self.assertEqual(result, "Message sent")
 
