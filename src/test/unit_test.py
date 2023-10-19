@@ -71,8 +71,8 @@ class BasicTestCase(unittest.TestCase):
         ans = self.app.get('/deleteTask')
         self.assertEqual(ans.status_code, 200)
     
-    @patch('your_module.mongo.db.tasks.find')
-    @patch('your_module.mail.send')
+    @patch('application.mongo.db.tasks.find')
+    @patch('application.mail.send')
     def test_email_reminder(self, mock_send, mock_find):
         tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
         mock_task = {
