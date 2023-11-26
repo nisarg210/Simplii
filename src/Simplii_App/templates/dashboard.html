@@ -1,0 +1,108 @@
+<!--
+   Copyright 2023 Simplii from Group74 NCSU CSC510
+
+   Licensed under the MIT/X11 License (http://opensource.org/licenses/MIT)
+-->
+
+{% extends "layout.html" %}
+{% block content %}
+<div class="card status-card col-md" style="width: auto;">
+    <div class="card-body">
+        <h5 class="card-title">All Tasks</h5>
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlCategory").on("change", function () {
+            var Category = $('#ddlCategory').find("option:selected").val();
+            SearchData(Category)
+        });
+    });
+    function SearchData(Category) {
+        if (Category.toUpperCase() == 'ALL') {
+            $('#myTable tbody tr').show();
+        } 
+        else 
+        {
+            // Hide all rows first
+            $('#myTable tbody tr').hide();
+            // Show rows matching the selected "Category"
+            $('#myTable tbody tr:has(td)').each(function () {
+                var rowCategory = $.trim($(this).find('td:eq(2)').text());
+                if (rowCategory.toUpperCase() == Category.toUpperCase()) {
+                    $(this).show();
+                }
+            });
+        }
+    }
+</script>
+
+    
+<table data-toggle="table" data-flat="true" data-search="true" id="myTable" class="paginated table table-striped table-hover">
+        <div class="table-wrapper">
+            <div class="table-title">
+            </div>
+                <div class="table-filter">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="show-entries">
+                                <span>Show</span>
+                                <select class="form-control">
+                                    <option>5</option>
+                                    <option>10</option>
+                                </select>
+                                <span>entries</span>
+                                &nbsp
+                                &nbsp
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            &nbsp
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="filter-group">
+                        <label>Category</label>
+                            <select class="cl_category" id="ddlCategory">
+                                <option value="all">Select category </option>
+                                <option value="Easy">Easy</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                            &nbsp
+                    </div>
+                    <span class="filter-icon"><i class="fa fa-filter"></i></span>
+                </div>
+            </div>
+            
+        </div>
+        <thead>
+            <tr style="background-color: #D5D8DD; text-align: center;">
+                <th>Task</th>
+                <th data-sortable="true">Progress</th>
+                <th data-sortable="true">Category</th>
+                <th>Start Date</th>
+                <th>Description</th>
+                <th>Actual Hours</th>
+                <th>Complete</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in tasks %}
+            <tr style="text-align: center;">
+                <td>{{ item['taskname'] }}</td>
+                <td>{{ item['progress'] }}%</td>
+                <td>{{ item['category'] }}</td>
+                <td>{{ item['startdate'] }}</td>
+                <td>{{ item['description'] }}</td>
+                <td><input type="number" id="actualhours" name="actualhours" min="1" max="24"></td>
+                <td style="text-align: center;"><button class='completeButton'>Complete</button></td>
+                <td style="text-align: center;"><button class='deleteButton'>Delete</button></td>
+            </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
